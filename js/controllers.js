@@ -2,17 +2,15 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', []).
+angular.module('myApp.controllers', ['myApp.services']).
 
-  controller('ListCtrl', ['$scope', 'Restangular', function ($scope, Restangular) {
-    $scope.projects = Restangular.all("projects").getList();
+  controller('ListCtrl', ['$scope','ProjectFactory', function ($scope, ProjectFactory) {
+    $scope.projects = ProjectFactory.getList();
   }]).
 
-  controller('CreateCtrl', ['$scope', '$location', 'Restangular', function ($scope, $location, Restangular) {
+  controller('CreateCtrl', ['$scope', 'ProjectFactory', function ($scope, ProjectFactory) {
     $scope.save = function() {
-      Restangular.all('projects').post($scope.project).then(function(project) {
-        $location.path('/list');
-      });
+      return ProjectFactory.save($scope.project);
     }
   }]).
 
@@ -23,7 +21,7 @@ angular.module('myApp.controllers', []).
 
     $scope.isClean = function() {
       return angular.equals(original, $scope.project);
-    }
+    };
 
     $scope.destroy = function() {
       original.remove().then(function() {
