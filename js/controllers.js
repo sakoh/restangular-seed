@@ -14,24 +14,19 @@ angular.module('myApp.controllers', ['myApp.services']).
     }
   }]).
 
-  controller('EditCtrl', ['$scope', '$location', 'Restangular', 'project', function ($scope, $location, Restangular, project) {
+  controller('EditCtrl', ['$scope','project', 'Restangular','ProjectFactory', function ($scope,project, Restangular, ProjectFactory) {
     var original = project;
     $scope.project = Restangular.copy(original);
-    
 
     $scope.isClean = function() {
-      return angular.equals(original, $scope.project);
+      return ProjectFactory.isClean(original,$scope.project);
     };
 
     $scope.destroy = function() {
-      original.remove().then(function() {
-        $location.path('/list');
-      });
+      return ProjectFactory.destroy(original);
     };
 
-    $scope.save = function() {
-      $scope.project.put().then(function() {
-        $location.path('/');
-      });
+    $scope.edit = function() {
+      return ProjectFactory.edit($scope.project);
     };
   }]);

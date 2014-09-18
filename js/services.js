@@ -15,6 +15,19 @@ angular.module('myApp.services', [])
             },
             getList: function () {
                 return Restangular.all("projects").getList();
+            },
+            isClean: function (obj1, obj2) {
+                return angular.equals(obj1, obj2);
+            },
+            destroy: function (obj) {
+                obj.remove().then(function() {
+                    $location.path('/list');
+                });
+            },
+            edit: function (obj) {
+                obj.put().then(function() {
+                    $location.path('/');
+                });
             }
         };
     }])
